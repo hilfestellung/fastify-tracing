@@ -1,6 +1,6 @@
 {
   "name": "@hilfestellung/fastify-tracing",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Fastify Tracing plugin.",
   "author": "Christian Dein",
   "license": "LGPL-2.1-or-later",
@@ -16,7 +16,8 @@
     "start": "ts-node ./src/index.ts",
     "build": "tsc",
     "test": "run-s test:unit",
-    "test:unit": "rimraf coverage && jest --coverage"
+    "test:unit": "rimraf coverage && jest --coverage",
+    "prepublish": "run-s build"
   },
   "devDependencies": {
     "@types/jest": "^25.1.4",

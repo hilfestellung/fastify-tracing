@@ -29,7 +29,7 @@ function createLogFn(
 }
 
 class LoggerWrapper implements FastifyLoggerInstance {
-  constructor(private logger: FastifyLoggerInstance, private traceId: string) {}
+  constructor(private logger: FastifyLoggerInstance, public traceId: string) {}
   info = createLogFn(this.logger, this.logger.info, this.traceId);
   warn = createLogFn(this.logger, this.logger.warn, this.traceId);
   error = createLogFn(this.logger, this.logger.error, this.traceId);
@@ -51,10 +51,11 @@ function tracing(
   next: Function
 ) {
   const headerName = (options.headerName || 'X-Trace-Id').toLowerCase();
-  fastify.addHook('onRequest', (request, _reply, done) => {
+  fastify.addHook('onRequest', (request, reply, done) => {
     const traceIdHeader = request.headers[headerName];
     const traceId = traceIdHeader ? (traceIdHeader as string) : uuidV4();
     request.log = new LoggerWrapper(request.log, traceId);
+    reply.header('X-Trace-Id', traceId);
     done();
   });
   next();
